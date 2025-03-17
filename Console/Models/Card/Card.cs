@@ -5,9 +5,9 @@ public class Card
     public required CardSide Back { get; set; }
     public required CardStatus Status { get; set; }
     public string? Hint { get; set; }
-    public string? Tags { get; set; }
+    public List<string>? Tags { get; set; }
     public string? CreatedBy { get; set; }
-    public required DateTime CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
     public string? ModifiedBy { get; set; }
     public DateTime? ModifiedAt { get; set; }
 
@@ -18,7 +18,7 @@ public class Card
         Back = back;
         
         Status = CardStatus.Active;
-        CreatedAt = DateTime.Now;
+        CreatedAt = DateTimeOffset.UtcNow;
     }
     
 }
