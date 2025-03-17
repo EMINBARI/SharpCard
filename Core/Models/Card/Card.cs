@@ -2,14 +2,14 @@ namespace Core.Models;
 
 public class Card 
 {
-    public required int Id { get; set; }
-    public required CardSide Front { get; set; }
-    public required CardSide Back { get; set; }
-    public required CardStatus Status { get; set; }
+    public int Id { get; set; }
+    public CardSide Front { get; set; }
+    public CardSide Back { get; set; }
+    public CardStatus Status { get; set; }
     public string? Hint { get; set; }
     public List<string>? Tags { get; set; }
     public string? CreatedBy { get; set; }
-    public required DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
     public string? ModifiedBy { get; set; }
     public DateTime? ModifiedAt { get; set; }
 
