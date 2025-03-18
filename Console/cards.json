@@ -1,0 +1,20 @@
+[
+  {
+    "Id": 0,
+    "Front": {
+      "Text": "Apple",
+      "ImageUrl": null
+    },
+    "Back": {
+      "Text": "Apfel",
+      "ImageUrl": null
+    },
+    "Status": 0,
+    "Hint": null,
+    "Tags": null,
+    "CreatedBy": null,
+    "CreatedAt": "2025-03-18T18:34:12.381837+00:00",
+    "ModifiedBy": null,
+    "ModifiedAt": null
+  }
+]
