@@ -8,20 +8,21 @@ class Program
 {
     static List<Card> cards = new List<Card>();
     static int nextId = 0;
-    
+
     static void Main()
     {
         Console.WriteLine("Welcome to SharpCard! Type 'help' for commands.");
 
-        while (true) 
+        while (true)
         {
             Console.Write(">");
 
             string? command = Console.ReadLine()?.Trim().ToLower();
 
-            if (string.IsNullOrEmpty(command)) continue;
+            if (string.IsNullOrEmpty(command))
+                continue;
 
-            switch (command) 
+            switch (command)
             {
                 case "help":
                     ShowHelp();
@@ -37,22 +38,15 @@ class Program
                 default:
                     Console.WriteLine("Unknown command. Type 'help' for options.");
                     break;
-
             }
-
-        }
-
     }
-
-
+}
 
     static void AddCard()
     {
         Console.WriteLine("Enter front of card (Question):");
         string? frontText = Console.ReadLine();
-        
         string? imgLink = null;
-
         Console.WriteLine("Do you want to add image link of this card? (y/n)");
         string? imgAnswer = Console.ReadLine()?.ToLower();
         if(imgAnswer == "y")
