@@ -2,11 +2,11 @@
   {
     "Id": 0,
     "Front": {
-      "Text": "Apple",
-      "ImageUrl": null
+      "Text": "A table",
+      "ImageUrl": ""
     },
     "Back": {
-      "Text": "Apfel",
+      "Text": "Der Tisch",
       "ImageUrl": null
     },
     "Status": 0,

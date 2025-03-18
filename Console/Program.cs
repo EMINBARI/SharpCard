@@ -41,6 +41,9 @@ class Program
                 case "load":
                     cards = LoadCards(filePath);
                     break;
+                case "edit":
+                    EditCard();
+                    break;
                 case "exit":
                     return;
                 default:
@@ -48,6 +51,42 @@ class Program
                     break;
             }
         }
+    }
+
+    static void EditCard(){
+        Console.WriteLine("Enter Id of card you want to edit:");
+
+        string? idInput = Console.ReadLine();
+        
+        if(!int.TryParse(idInput, out int id) || id < 0){
+            Console.WriteLine("Invalid input.");
+            return;
+        }
+        
+        Card? card = cards.Find(c => c.Id == id);
+
+        if(card == null){
+            Console.WriteLine("Card not found.");
+            return;
+        }
+
+        Console.WriteLine($"ID: {card.Id} | Q: {card.Front.Text} | A: {card.Back.Text}");
+
+        Console.WriteLine("Enter new front of card (Question):");
+        string? frontText = Console.ReadLine();
+    
+        Console.WriteLine("Enter new image link (or just skip):");
+        string? imgLink = Console.ReadLine();
+        
+        Console.WriteLine("Enter new back of card (Answer):");
+        string? backText = Console.ReadLine();
+
+
+        card.Front.Text = frontText ?? card.Front.Text;
+        card.Front.ImageUrl = imgLink ?? card.Front.ImageUrl;
+        card.Back.Text = backText ?? card.Back.Text;
+
+        Console.WriteLine("Changes were applied.");
     }
 
     static void SaveCards(List<Card> cards, string filePath)
@@ -131,6 +170,7 @@ class Program
         Console.WriteLine("Commands:");
         Console.WriteLine("  help - Show this help");
         Console.WriteLine("  add  - Add a new card");
+        Console.WriteLine("  edit - Edit a card");
         Console.WriteLine("  show - Show all cards");
         Console.WriteLine("  save - Save cards to file");
         Console.WriteLine("  load - Load cards from file");
