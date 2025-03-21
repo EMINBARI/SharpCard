@@ -1,18 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading.Tasks;
+using App.Services;
+using App.Services.RequestModels;
 using Core.Models;
+using Core.Repositories;
+using Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsoleApp;
 class Program
 {
-    static List<Card> cards = new List<Card>();
-    static int nextId = 0;
 
-    const string filePath = "cards.json";
-
-    static void Main()
+    
+    static async Task Main()
     {
+        IServiceCollection services = new ServiceCollection();
+
+        services.AddSingleton<ICardRepository, InMemoryCardRepository>();
+        services.AddScoped<ICardService, CardService>();
+
+        var provider = services.BuildServiceProvider();
+
+        var cardService = provider.GetRequiredService<ICardService>();
+
+
         Console.WriteLine("Welcome to SharpCard! Type 'help' for commands.");
 
         while (true)
@@ -30,19 +42,19 @@ class Program
                     ShowHelp();
                     break;
                 case "add":
-                    AddCard();
+                    await AddCard(cardService);
                     break;
                 case "show":
-                    ShowCards();
+                    await ShowCards(cardService);
                     break;
                 case "save":
-                    SaveCards(cards, filePath);
+                    SaveCards();
                     break;
                 case "load":
-                    cards = LoadCards(filePath);
+                   LoadCards();
                     break;
                 case "edit":
-                    EditCard();
+                    await EditCard(cardService);
                     break;
                 case "exit":
                     return;
@@ -53,22 +65,46 @@ class Program
         }
     }
 
-    static void EditCard(){
+
+    static async Task AddCard(ICardService cardService)
+    {
+
+        Console.WriteLine("Enter front of card (Question):");
+        string? frontText = Console.ReadLine();
+        string? imgLink = null;
+        Console.WriteLine("Do you want to add image link of this card? (y/n)");
+        string? imgAnswer = Console.ReadLine()?.ToLower();
+        if(imgAnswer == "y")
+        {
+            Console.WriteLine("Enter image link:");
+            imgLink = Console.ReadLine();
+        }
+        Console.WriteLine("Enter back of card (Answer):");
+        string? backText = Console.ReadLine();
+
+
+        await cardService.AddCardAsync(
+            new AddCardRequest
+            {
+                FrontText = frontText,
+                BackText = backText,
+                ImgLink = imgLink
+            }
+        );
+    }
+    static async Task EditCard(ICardService cardService)
+    {
         Console.WriteLine("Enter Id of card you want to edit:");
 
         string? idInput = Console.ReadLine();
-        
-        if(!int.TryParse(idInput, out int id) || id < 0){
-            Console.WriteLine("Invalid input.");
+        if (!int.TryParse(idInput, out int id))
+        {
+            Console.WriteLine("Invalid Id");
             return;
         }
-        
-        Card? card = cards.Find(c => c.Id == id);
 
-        if(card == null){
-            Console.WriteLine("Card not found.");
-            return;
-        }
+        var card = await cardService.GetCardAsync(id);
+
 
         Console.WriteLine($"ID: {card.Id} | Q: {card.Front.Text} | A: {card.Back.Text}");
 
@@ -81,83 +117,34 @@ class Program
         Console.WriteLine("Enter new back of card (Answer):");
         string? backText = Console.ReadLine();
 
-
-        card.Front.Text = frontText ?? card.Front.Text;
-        card.Front.ImageUrl = imgLink ?? card.Front.ImageUrl;
-        card.Back.Text = backText ?? card.Back.Text;
-
-        Console.WriteLine("Changes were applied.");
+        await cardService.UpdateCardAsync(
+            new UpdateCardRequest
+            {
+                Id = id,
+                FrontText = frontText,
+                BackText = backText,
+                ImgLink = imgLink
+            }
+        );
     }
 
-    static void SaveCards(List<Card> cards, string filePath)
+    static void SaveCards()
     {
-        if (cards.Count == 0)
-        {
-            Console.WriteLine("No cards to save.");
-            return;
-        }
-
-        var options = new JsonSerializerOptions { WriteIndented = true };   
-        string jsonString = JsonSerializer.Serialize(cards, options);
-        File.WriteAllText(filePath, jsonString);
-        Console.WriteLine("Cards successfully saved to file.");
+        throw new NotImplementedException();
     }
 
-    static List<Card> LoadCards(string filePath){
-
-        if(File.Exists(filePath)){
-            string jsonString = File.ReadAllText(filePath);
-            cards = JsonSerializer.Deserialize<List<Card>>(jsonString) ?? new List<Card>();
-
-            nextId = cards.Count > 0 ? cards.Max(c => c.Id) + 1 : 1; // Обновляем nextId
-
-            Console.WriteLine("Cards were successfully loaded.");
-            
-            return cards;
-        }
-
-        Console.WriteLine("Cannot find file. Starting with empty cards.");
-        return new List<Card>();
-
+    static List<Card> LoadCards()
+    {
+        throw new NotImplementedException();
     }
     
+    
 
-    static void AddCard()
+    static async Task ShowCards(ICardService cardService)
     {
-        Console.WriteLine("Enter front of card (Question):");
-        string? frontText = Console.ReadLine();
-        string? imgLink = null;
-        Console.WriteLine("Do you want to add image link of this card? (y/n)");
-        string? imgAnswer = Console.ReadLine()?.ToLower();
-        if(imgAnswer == "y")
-        {
-            Console.WriteLine("Enter image link:");
-            imgLink = Console.ReadLine();
-        }
+        var cards = await cardService.GetCardsAsync();
 
-        Console.WriteLine("Enter back of card (Answer):");
-        string? backText = Console.ReadLine();
-
-
-        if(!string.IsNullOrEmpty(frontText) && !string.IsNullOrEmpty(backText))
-        {
-            cards.Add(new Card(nextId++ , new CardSide {Text = frontText, ImageUrl = imgLink}, new CardSide {Text = backText}));
-            Console.WriteLine("Card was added!");
-        }
-        else
-        {
-            Console.WriteLine("Question and answer cannot be empty.");
-        }
-
-    }
-
-    static void ShowCards()
-    {
-        if (cards.Count == 0)
-        {
-            Console.WriteLine("No cards yet.");
-            return;
-        }
+        //todo: empty list message
 
         foreach (var card in cards)
         {

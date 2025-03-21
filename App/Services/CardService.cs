@@ -1,5 +1,6 @@
 using App.Services.RequestModels;
 using App.Services.ResponseModels;
+using Core.Models;
 using Core.Repositories;
 
 
@@ -13,28 +14,58 @@ public class CardService: ICardService
         _cardRepository = cardRepository;
     }
 
-    public Task<CardResponse> AddCardAsync(AddCardRequest request)
+    public async Task<CardResponse> AddCardAsync(AddCardRequest request)
     {
-        throw new NotImplementedException();
+        var card = new Card (
+            id: 0, //! This is a temporary value
+            front: new CardSide(request.FrontText, request.ImgLink), 
+            back: new CardSide (request.BackText, request.ImgLink)
+        );
+        await _cardRepository.AddAsync(card);
+
+        return new CardResponse(card);
     }
 
-    public Task<CardResponse> UpdateCardAsync(UpdateCardRequest request)
+    public async Task<CardResponse> UpdateCardAsync(UpdateCardRequest request)
     {
-        throw new NotImplementedException();
+        var card = await _cardRepository.GetAsync(request.Id);
+
+        if (card == null)
+            throw new Exception($"Could not find card with id {request.Id}");
+        
+        card.Front = new CardSide(
+            request.FrontText ?? card.Front.Text, 
+            request.ImgLink ?? card.Front.ImageUrl
+        );
+
+        card.Back = new CardSide(
+            request.BackText ?? card.Back.Text, 
+            request.ImgLink ?? card.Back.ImageUrl
+        ); 
+
+        await _cardRepository.UpdateAsync(card);
+
+        return new CardResponse(card);
     }
 
-    public Task DeleteCardAsync(int id)
+    public async Task DeleteCardAsync(int id)
     {
-        throw new NotImplementedException();
+        await _cardRepository.DeleteAsync(id);
     }
 
-    public Task<CardResponse> GetCardAsync(int id)
+    public async Task<CardResponse> GetCardAsync(int id)
     {
-        throw new NotImplementedException();
+        var card = await _cardRepository.GetAsync(id);
+
+        if (card == null)
+            throw new Exception($"Could not find a Card with given id = {id}");
+
+        return new CardResponse(card);
     }
 
-    public Task<IEnumerable<CardResponse>> GetCardsAsync()
+    public async Task<IEnumerable<CardResponse>> GetCardsAsync()
     {
-        throw new NotImplementedException();
+        var cards = await _cardRepository.GetAllAsync();
+        return cards.Select(card => new CardResponse(card ?? throw new Exception("No cards found")));
     }
 }
