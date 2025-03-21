@@ -13,9 +13,8 @@ public class Card
     public string? ModifiedBy { get; set; }
     public DateTime? ModifiedAt { get; set; }
 
-    public Card(int id, CardSide front, CardSide back)
+    public Card(CardSide front, CardSide back)
     {
-        Id = id;
         Front = front;
         Back = back;
         

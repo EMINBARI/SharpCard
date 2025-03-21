@@ -105,7 +105,6 @@ class Program
 
         var card = await cardService.GetCardAsync(id);
 
-
         Console.WriteLine($"ID: {card.Id} | Q: {card.Front.Text} | A: {card.Back.Text}");
 
         Console.WriteLine("Enter new front of card (Question):");

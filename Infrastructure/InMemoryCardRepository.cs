@@ -5,17 +5,21 @@ namespace Infrastructure;
 
 public class InMemoryCardRepository : ICardRepository
 {
-    static List<Card?> cards = new List<Card?>();
+    List<Card?> cards = new List<Card?>();
+    int MaxId { get; set; } = 1;
 
     public Task AddAsync(Card card)
     {
+        card.Id = MaxId;
         cards.Add(card);
+        MaxId++;
         return Task.CompletedTask;
     }
 
     public Task DeleteAsync(int id)
     {
         cards.RemoveAt(id);
+        MaxId--;
         return Task.CompletedTask;
     }
 
@@ -26,12 +30,13 @@ public class InMemoryCardRepository : ICardRepository
 
     public Task<Card?> GetAsync(int id)
     {
-        return Task.FromResult(cards[id]);
+        return Task.FromResult(cards.Find(c => c?.Id == id));
     }
 
     public Task UpdateAsync(Card card)
     {
-        cards[card.Id] = card;
+        cards[cards.FindIndex(card => card?.Id == card?.Id)] = card;
+
         return Task.CompletedTask;
     }
 }

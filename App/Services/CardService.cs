@@ -17,7 +17,6 @@ public class CardService: ICardService
     public async Task<CardResponse> AddCardAsync(AddCardRequest request)
     {
         var card = new Card (
-            id: 0, //! This is a temporary value
             front: new CardSide(request.FrontText, request.ImgLink), 
             back: new CardSide (request.BackText, request.ImgLink)
         );
