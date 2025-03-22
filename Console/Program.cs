@@ -68,7 +68,6 @@ class Program
 
     static async Task AddCard(ICardService cardService)
     {
-
         Console.WriteLine("Enter front of card (Question):");
         string? frontText = Console.ReadLine();
         string? imgLink = null;
@@ -84,12 +83,9 @@ class Program
 
 
         await cardService.AddCardAsync(
-            new AddCardRequest
-            {
-                FrontText = frontText,
-                BackText = backText,
-                ImgLink = imgLink
-            }
+             new AddCardRequest(
+                frontSide: new AddCardRequest.AddCardSideRequest { Text = frontText, ImgUrl = imgLink }, 
+                backSide: new AddCardRequest.AddCardSideRequest {Text = backText})
         );
     }
     static async Task EditCard(ICardService cardService)

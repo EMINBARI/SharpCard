@@ -16,10 +16,16 @@ public class CardService: ICardService
 
     public async Task<CardResponse> AddCardAsync(AddCardRequest request)
     {
+        if(request.FrontSide.Text == null || request.BackSide.Text == null)
+        {
+            throw new Exception("Front and back side text must be provided");
+        }
+
         var card = new Card (
-            front: new CardSide(request.FrontText, request.ImgLink), 
-            back: new CardSide (request.BackText, request.ImgLink)
+            front: new CardSide(request.FrontSide.Text) { ImageUrl = request.FrontSide.ImgUrl }, 
+            back: new CardSide (request.BackSide.Text) { ImageUrl = request.BackSide.ImgUrl }
         );
+        
         await _cardRepository.AddAsync(card);
 
         return new CardResponse(card);
@@ -32,15 +38,15 @@ public class CardService: ICardService
         if (card == null)
             throw new Exception($"Could not find card with id {request.Id}");
         
-        card.Front = new CardSide(
-            request.FrontText ?? card.Front.Text, 
-            request.ImgLink ?? card.Front.ImageUrl
-        );
+        card.Front = new CardSide(request.FrontText ?? card.Front.Text) 
+        { 
+            ImageUrl = request.ImgLink ?? card.Front.ImageUrl 
+        };
 
-        card.Back = new CardSide(
-            request.BackText ?? card.Back.Text, 
-            request.ImgLink ?? card.Back.ImageUrl
-        ); 
+        card.Back = new CardSide(request.BackText ?? card.Back.Text)
+        {
+            ImageUrl = request.ImgLink ?? card.Front.ImageUrl 
+        }; 
 
         await _cardRepository.UpdateAsync(card);
 
