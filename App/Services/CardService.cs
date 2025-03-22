@@ -37,21 +37,19 @@ public class CardService: ICardService
 
         if (card == null)
             throw new Exception($"Could not find card with id {request.Id}");
-        
-        card.Front = new CardSide
-        (
-            !string.IsNullOrEmpty(request.FrontText) ? request.FrontText : card.Front.Text
-        ) 
+
+        if (string.IsNullOrWhiteSpace(request.FrontText) || string.IsNullOrWhiteSpace(request.BackText)){
+            throw new Exception("Front and Back text must be provided");
+        }
+
+        card.Front = new CardSide(request.FrontText) 
         { 
-            ImageUrl = request.ImgLink ?? card.Front.ImageUrl 
+            ImageUrl = request.ImgLink
         };
 
-        card.Back = new CardSide
-        (
-            !string.IsNullOrEmpty(request.BackText) ? request.BackText : card.Back.Text
-        )
+        card.Back = new CardSide(request.BackText)
         {
-            ImageUrl = request.ImgLink ?? card.Front.ImageUrl 
+            ImageUrl = request.ImgLink
         }; 
 
         await _cardRepository.UpdateAsync(card);
@@ -77,6 +75,7 @@ public class CardService: ICardService
     public async Task<IEnumerable<CardResponse>> GetCardsAsync()
     {
         var cards = await _cardRepository.GetAllAsync();
-        return cards.Select(card => new CardResponse(card ?? throw new Exception("No cards found")));
+
+        return cards.Select(card => new CardResponse(card));
     }
 }
