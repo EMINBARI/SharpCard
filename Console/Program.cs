@@ -51,7 +51,7 @@ class Program
                     SaveCards();
                     break;
                 case "load":
-                   LoadCards();
+                    LoadCards();
                     break;
                 case "edit":
                     await EditCard(cardService);
