@@ -11,19 +11,17 @@ using Microsoft.Extensions.DependencyInjection;
 namespace ConsoleApp;
 class Program
 {
-
-    
     static async Task Main()
     {
-        IServiceCollection services = new ServiceCollection();
+        const string JSON_FILE_PATH = "cards.json";
 
-        services.AddSingleton<ICardRepository, InMemoryCardRepository>();
+        IServiceCollection services = new ServiceCollection();
+        services.AddSingleton<ICardRepository, JsonFileCardRepository>(_ => new JsonFileCardRepository(JSON_FILE_PATH));
         services.AddScoped<ICardService, CardService>();
 
         var provider = services.BuildServiceProvider();
 
         var cardService = provider.GetRequiredService<ICardService>();
-
 
         Console.WriteLine("Welcome to SharpCard! Type 'help' for commands.");
 
@@ -47,14 +45,11 @@ class Program
                 case "show":
                     await ShowCards(cardService);
                     break;
-                case "save":
-                    SaveCards();
-                    break;
-                case "load":
-                    LoadCards();
-                    break;
                 case "edit":
                     await EditCard(cardService);
+                    break;
+                case "delete":
+                    await DeleteCard(cardService);
                     break;
                 case "exit":
                     return;
@@ -64,7 +59,6 @@ class Program
             }
         }
     }
-
 
     static async Task AddCard(ICardService cardService)
     {
@@ -88,6 +82,21 @@ class Program
                 backSide: new AddCardRequest.AddCardSideRequest {Text = backText})
         );
     }
+    
+    static async Task DeleteCard(ICardService cardService)
+    {
+        Console.WriteLine("Enter Id of card you want to delete:");
+
+        string? idInput = Console.ReadLine()?.Trim()?.ToLower();
+        if (!int.TryParse(idInput, out int id))
+        {
+            Console.WriteLine("Invalid Id");
+            return;
+        }
+
+        await cardService.DeleteCardAsync(id);
+    }
+    
     static async Task EditCard(ICardService cardService)
     {
         Console.WriteLine("Enter Id of card you want to edit:");
@@ -123,18 +132,6 @@ class Program
         );
     }
 
-    static void SaveCards()
-    {
-        throw new NotImplementedException();
-    }
-
-    static List<Card> LoadCards()
-    {
-        throw new NotImplementedException();
-    }
-    
-    
-
     static async Task ShowCards(ICardService cardService)
     {
         var cards = await cardService.GetCardsAsync();
@@ -154,8 +151,7 @@ class Program
         Console.WriteLine("  add  - Add a new card");
         Console.WriteLine("  edit - Edit a card");
         Console.WriteLine("  show - Show all cards");
-        Console.WriteLine("  save - Save cards to file");
-        Console.WriteLine("  load - Load cards from file");
+        Console.WriteLine("  delete - Delete a card");
         Console.WriteLine("  exit - Exit the app");
     }
 
