@@ -6,58 +6,58 @@ namespace Infrastructure;
 
 public class JsonFileCardRepository : ICardRepository
 {
-    private readonly JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
-
-    string FilePath { get; set; }
-
-    int MaxId { get; set; } = 1;
-
-    List<Card> cards = [];
+    private readonly JsonSerializerOptions _options = new JsonSerializerOptions { WriteIndented = true };
+    private readonly string _filePath;
+    private int _maxId = 1;
+    private List<Card> _cards = [];
 
     public JsonFileCardRepository(string path)
     {
-        FilePath = path;
+        _filePath = path;
 
-        if(!File.Exists(FilePath))
+        if(!File.Exists(_filePath))
         {
-            File.Create(FilePath);
+            try
+            {
+                File.Create(_filePath).Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw new IOException($"Failed to create the file at {_filePath}.", ex);
+            }
         }
 
-        string jsonStr = File.ReadAllText(FilePath);
-        cards = JsonSerializer.Deserialize<List<Card>>(jsonStr) ?? [];
-        MaxId = cards.Max(c => c.Id);
+        string jsonStr = File.ReadAllText(_filePath);
+        _cards = JsonSerializer.Deserialize<List<Card>>(jsonStr) ?? [];
+        _maxId = _cards.Any() ? _cards.Max(c => c.Id) : 1;
     }
 
-    public Task AddAsync(Card card)
+    public async Task AddAsync(Card card)
     {
-        MaxId++;
-        card.Id = MaxId;
-        cards.Add(card);
+        _maxId++;
+        card.Id = _maxId;
+        _cards.Add(card);
        
-        string jsonString = JsonSerializer.Serialize(cards, options);
-        File.WriteAllText(FilePath, jsonString);
-        
-        return Task.CompletedTask;
+        string jsonString = JsonSerializer.Serialize(_cards, _options);
+        await File.WriteAllTextAsync(_filePath, jsonString);
     }
 
-    public Task DeleteAsync(int id)
+    public async Task DeleteAsync(int id)
     {
-        cards.RemoveAt(id);
+        _cards.RemoveAt(id);
 
-        string jsonString = JsonSerializer.Serialize(cards, options);
-        File.WriteAllText(FilePath, jsonString);
-
-        return Task.CompletedTask;
+        string jsonString = JsonSerializer.Serialize(_cards, _options);
+        await File.WriteAllTextAsync(_filePath, jsonString);
     }
 
     public Task<IEnumerable<Card>> GetAllAsync()
     {
-        return Task.FromResult(cards.AsEnumerable());
+        return Task.FromResult(_cards.AsEnumerable());
     }
 
     public Task<Card> GetAsync(int id)
     {
-        var card = cards.Find(c => c.Id == id);
+        var card = _cards.Find(c => c.Id == id);
 
         if (card == null)
             throw new Exception($"Could not find card with id {id}");
@@ -65,13 +65,11 @@ public class JsonFileCardRepository : ICardRepository
         return Task.FromResult(card);
     }
 
-    public Task UpdateAsync(Card card)
+    public async Task UpdateAsync(Card card)
     {
-        cards[cards.FindIndex(card => card?.Id == card?.Id)] = card;
+        _cards[_cards.FindIndex(card => card?.Id == card?.Id)] = card;
 
-        string jsonString = JsonSerializer.Serialize(cards, options);
-        File.WriteAllText(FilePath, jsonString);
-
-        return Task.CompletedTask;
+        string jsonString = JsonSerializer.Serialize(_cards, _options);
+        await File.WriteAllTextAsync(_filePath, jsonString);
     }
 }
