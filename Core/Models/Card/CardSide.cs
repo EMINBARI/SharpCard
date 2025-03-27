@@ -6,5 +6,5 @@ public class CardSide {
     public CardSide(string text)
     {
         Text = text;
-    }   
+    } 
 }

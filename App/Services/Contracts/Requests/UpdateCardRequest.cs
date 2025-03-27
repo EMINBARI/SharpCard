@@ -1,4 +1,4 @@
-namespace App.Services.RequestModels;
+namespace App.Services.Contracts.Requests;
 
 public class UpdateCardRequest
 {    

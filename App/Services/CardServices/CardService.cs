@@ -1,4 +1,4 @@
-using App.Services.RequestModels;
+using App.Services.Contracts.Requests;
 using App.Services.ResponseModels;
 using Core.Models;
 using Core.Repositories;

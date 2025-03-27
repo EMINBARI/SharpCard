@@ -1,7 +1,7 @@
-namespace App.Services;
-using Core.Models;
-using App.Services.RequestModels;
+using App.Services.Contracts.Requests;
 using App.Services.ResponseModels;
+
+namespace App.Services;
 
 public interface ICardService
 {
