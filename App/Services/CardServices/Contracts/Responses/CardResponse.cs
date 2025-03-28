@@ -1,7 +1,5 @@
 using Core.Models;
-using Services.ResponseModels;
-namespace App.Services.ResponseModels;
-
+namespace App.Services.CardServices.Contracts;
 
 public class CardResponse
 {

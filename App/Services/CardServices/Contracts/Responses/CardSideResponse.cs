@@ -1,5 +1,6 @@
 using Core.Models;
-namespace Services.ResponseModels;
+
+namespace App.Services.CardServices.Contracts;
 public class CardSideResponse 
 {
     public string Text { get; }

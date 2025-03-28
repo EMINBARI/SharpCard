@@ -1,6 +1,6 @@
 ﻿
 using App.Services;
-using App.Services.Contracts.Requests;
+using App.Services.CardServices.Contracts;
 using Core.Repositories;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;

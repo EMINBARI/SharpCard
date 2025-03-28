@@ -8,5 +8,5 @@ public interface ICardRepository
     public Task UpdateAsync(Card card);
     public Task DeleteAsync(Guid id);
     public Task<Card> GetAsync(Guid id);
-   public Task<IEnumerable<Card>> GetAllAsync();
+    public Task<IEnumerable<Card>> GetAllAsync();
 }

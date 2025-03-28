@@ -1,5 +1,4 @@
-using App.Services.Contracts.Requests;
-using App.Services.ResponseModels;
+using App.Services.CardServices.Contracts;
 
 namespace App.Services;
 

@@ -1,8 +1,7 @@
-namespace App.Services.Contracts.Requests;
+namespace App.Services.CardServices.Contracts;
 
 public class AddCardRequest
 {
-
     public AddCardSideRequest FrontSide { get; set; }
     public AddCardSideRequest BackSide { get; set; }
 

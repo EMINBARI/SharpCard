@@ -1,8 +1,6 @@
-using App.Services.Contracts.Requests;
-using App.Services.ResponseModels;
 using Core.Models;
 using Core.Repositories;
-
+using App.Services.CardServices.Contracts;
 
 namespace App.Services;
 
