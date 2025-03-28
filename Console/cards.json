@@ -1,37 +1,19 @@
 [
   {
-    "Id": 0,
+    "Id": "41d9475a-be44-4020-a41e-160ec599fad7",
     "Front": {
-      "Text": "Who is Bob?",
-      "ImageUrl": "n"
-    },
-    "Back": {
-      "Text": "Robert Martin",
-      "ImageUrl": "n"
-    },
-    "Status": 0,
-    "Hint": null,
-    "Tags": null,
-    "CreatedBy": null,
-    "CreatedAt": "2025-03-23T16:20:03.249484+00:00",
-    "ModifiedBy": null,
-    "ModifiedAt": null
-  },
-  {
-    "Id": 2,
-    "Front": {
-      "Text": "What\u0027s name of Homer Simpson\u0027s son?",
+      "Text": "hello",
       "ImageUrl": null
     },
     "Back": {
-      "Text": "Bart",
+      "Text": "\u043F\u0440\u0438\u0432\u0435\u0442",
       "ImageUrl": null
     },
     "Status": 0,
     "Hint": null,
     "Tags": null,
     "CreatedBy": null,
-    "CreatedAt": "2025-03-23T17:26:22.810519+00:00",
+    "CreatedAt": "2025-03-28T11:38:39.485167+00:00",
     "ModifiedBy": null,
     "ModifiedAt": null
   }

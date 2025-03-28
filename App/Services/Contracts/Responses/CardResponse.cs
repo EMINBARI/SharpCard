@@ -5,7 +5,7 @@ namespace App.Services.ResponseModels;
 
 public class CardResponse
 {
-    public int Id { get; }
+    public Guid Id { get; }
     public CardSideResponse Front { get; }
     public CardSideResponse Back { get; }
     public CardStatus Status { get; }

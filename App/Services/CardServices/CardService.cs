@@ -22,6 +22,7 @@ public class CardService: ICardService
         }
 
         var card = new Card (
+            id: Guid.NewGuid(),
             front: new CardSide(request.FrontSide.Text) { ImageUrl = request.FrontSide.ImgUrl }, 
             back: new CardSide (request.BackSide.Text) { ImageUrl = request.BackSide.ImgUrl }
         );
@@ -57,12 +58,12 @@ public class CardService: ICardService
         return new CardResponse(card);
     }
 
-    public async Task DeleteCardAsync(int id)
+    public async Task DeleteCardAsync(Guid id)
     {
         await _cardRepository.DeleteAsync(id);
     }
 
-    public async Task<CardResponse> GetCardAsync(int id)
+    public async Task<CardResponse> GetCardAsync(Guid id)
     {
         var card = await _cardRepository.GetAsync(id);
 

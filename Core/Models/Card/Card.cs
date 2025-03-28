@@ -2,7 +2,7 @@ namespace Core.Models;
 
 public class Card 
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public CardSide Front { get; set; }
     public CardSide Back { get; set; }
     public CardStatus Status { get; set; }
@@ -13,8 +13,9 @@ public class Card
     public string? ModifiedBy { get; set; }
     public DateTime? ModifiedAt { get; set; }
 
-    public Card(CardSide front, CardSide back)
+    public Card(Guid id, CardSide front, CardSide back)
     {
+        Id = id;
         Front = front;
         Back = back;
         

@@ -8,7 +8,6 @@ public class JsonFileCardRepository : ICardRepository
 {
     private readonly JsonSerializerOptions _options = new JsonSerializerOptions { WriteIndented = true };
     private readonly string _filePath;
-    private int _maxId = 1;
     private List<Card> _cards = [];
 
     public JsonFileCardRepository(string path)
@@ -29,22 +28,20 @@ public class JsonFileCardRepository : ICardRepository
 
         string jsonStr = File.ReadAllText(_filePath);
         _cards = JsonSerializer.Deserialize<List<Card>>(jsonStr) ?? [];
-        _maxId = _cards.Any() ? _cards.Max(c => c.Id) : 1;
     }
 
     public async Task AddAsync(Card card)
     {
-        _maxId++;
-        card.Id = _maxId;
         _cards.Add(card);
        
         string jsonString = JsonSerializer.Serialize(_cards, _options);
         await File.WriteAllTextAsync(_filePath, jsonString);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Guid id)
     {
-        _cards.RemoveAt(id);
+        var delId = _cards.FindIndex(c => c.Id == id);
+        _cards.RemoveAt(delId);
 
         string jsonString = JsonSerializer.Serialize(_cards, _options);
         await File.WriteAllTextAsync(_filePath, jsonString);
@@ -55,7 +52,7 @@ public class JsonFileCardRepository : ICardRepository
         return Task.FromResult(_cards.AsEnumerable());
     }
 
-    public Task<Card> GetAsync(int id)
+    public Task<Card> GetAsync(Guid id)
     {
         var card = _cards.Find(c => c.Id == id);
 

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿
 using App.Services;
-using App.Services.RequestModels;
-using Core.Models;
+using App.Services.Contracts.Requests;
 using Core.Repositories;
 using Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
@@ -88,7 +85,7 @@ class Program
         Console.WriteLine("Enter Id of card you want to delete:");
 
         string? idInput = Console.ReadLine()?.Trim()?.ToLower();
-        if (!int.TryParse(idInput, out int id))
+        if (!Guid.TryParse(idInput, out Guid id))
         {
             Console.WriteLine("Invalid Id");
             return;
@@ -102,7 +99,7 @@ class Program
         Console.WriteLine("Enter Id of card you want to edit:");
 
         string? idInput = Console.ReadLine();
-        if (!int.TryParse(idInput, out int id))
+        if (!Guid.TryParse(idInput, out Guid id))
         {
             Console.WriteLine("Invalid Id");
             return;

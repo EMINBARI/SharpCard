@@ -7,10 +7,13 @@ public class Record
     public string Side1 { get; set; }
     public string Side2 { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
-    public RecordStatus Status { get; set; }
     public string? Hint { get; set; }
     public string? ImageUrl { get; set; }
-    public List<Guid>? CardIds { get; set; }
+    public List<string>? Tags { get; set; }
+    public string? ModifiedBy { get; set; }
+    public DateTime? ModifiedAt { get; set; }
+     public List<Guid>? CardIds { get; set; }
+
 
     public Record(Guid id, Guid deckId, string side1, string side2)
     {
@@ -19,6 +22,5 @@ public class Record
         Side1 = side1;
         Side2 = side2;
         CreatedDate = DateTimeOffset.UtcNow;
-        Status = RecordStatus.Active;
     }
 }
