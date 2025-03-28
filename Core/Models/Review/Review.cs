@@ -1,6 +1,6 @@
 namespace Core.Models;
 
-class Review 
+public class Review 
 {
     public Guid Id { get; set; }
     public Guid CardId { get; set; }
