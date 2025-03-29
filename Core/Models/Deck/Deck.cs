@@ -7,7 +7,7 @@ public class Deck
     public string? Description { get; set; }
     public List<Card> Cards { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
-    public DateTime? ModifiedAt { get; set; }
+    public DateTimeOffset? ModifiedAt { get; set; }
 
     public Deck(Guid id, string name)
     {
