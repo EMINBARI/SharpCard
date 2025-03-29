@@ -7,6 +7,6 @@ public interface IRecordRepository
     public Task CreateAsync(Record record);
     public Task UpdateAsync(Record record);
     public Task DeleteAsync(Guid id);
-    public Task<Card> GetAsync(Guid id);
+    public Task<Record> GetAsync(Guid id);
     public Task<IEnumerable<Record>> GetAllAsync();
 }

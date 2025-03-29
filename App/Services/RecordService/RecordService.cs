@@ -6,16 +6,14 @@ namespace App.Services.RecordService;
 
 public class RecordService : IRecordService
 {
-    
     private readonly IRecordRepository _recordRepository;
     
-
     public RecordService(IRecordRepository recordRepository)
     {
         _recordRepository = recordRepository;
     }
 
-    public async Task<RecordResponse> AddCardAsync(AddRecordRequest request)
+    public async Task<RecordResponse> AddRecordAsync(AddRecordRequest request)
     {
         if (string.IsNullOrEmpty( request.Side1) || string.IsNullOrEmpty(request.Side2))
         {
@@ -38,24 +36,44 @@ public class RecordService : IRecordService
 
     }
 
-    public Task<RecordResponse> UpdateCardAsync(UpdateRecordRequest request)
+    public async Task<RecordResponse> UpdateRecordAsync(UpdateRecordRequest request)
     {
-        throw new NotImplementedException();
+        var record = await _recordRepository.GetAsync(request.Id);
+
+        if (record == null)
+            throw new Exception($"Could not find record with id {request.Id}");
+
+        record.Side1 = request.Side1;
+        record.Side2 = request.Side2;
+        record.DeckId = request.DeckId;
+        record.Hint = request.Hint;
+        record.ImageUrl = request.ImageUrl;
+        record.Tags = request.Tags;
+        record.ModifiedAt = DateTime.UtcNow;       
+
+        await _recordRepository.UpdateAsync(record);
+        return new RecordResponse(record);
     }
 
-    public Task DeleteCardAsync(Guid id)
+    public async Task DeleteRecordAsync(Guid id)
     {
-        throw new NotImplementedException();
+        await _recordRepository.DeleteAsync(id);
     }
 
-    public Task<RecordResponse> GetCardAsync(Guid id)
+    public async Task<RecordResponse> GetRecordAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var record = await _recordRepository.GetAsync(id);
+
+        if (record == null)
+            throw new Exception($"Could not find a Card with given id = {id}");
+
+        return new RecordResponse(record);
     }
 
-    public Task<IEnumerable<RecordResponse>> GetCardsAsync()
+    public async Task<IEnumerable<RecordResponse>> GetRecordsAsync()
     {
-        throw new NotImplementedException();
+        var record = await _recordRepository.GetAllAsync();
+        return record.Select(record => new RecordResponse(record));
     }
 
     

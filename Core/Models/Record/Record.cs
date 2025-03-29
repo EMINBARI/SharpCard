@@ -12,8 +12,7 @@ public class Record
     public List<string>? Tags { get; set; }
     public string? ModifiedBy { get; set; }
     public DateTime? ModifiedAt { get; set; }
-     public List<Guid>? CardIds { get; set; }
-
+    public List<Card> Cards { get; set; }
 
     public Record(Guid id, string side1, string side2)
     {
@@ -21,5 +20,6 @@ public class Record
         Side1 = side1;
         Side2 = side2;
         CreatedDate = DateTimeOffset.UtcNow;
+        Cards = new List<Card>();
     }
 }

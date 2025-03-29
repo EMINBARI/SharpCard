@@ -4,9 +4,9 @@ namespace App.Services.RecordService;
 
 public interface IRecordService
 {
-    public Task<RecordResponse> AddCardAsync(AddRecordRequest request);
-    public Task<RecordResponse> UpdateCardAsync(UpdateRecordRequest request);
-    public Task DeleteCardAsync(Guid id);
-    public Task<RecordResponse> GetCardAsync(Guid id);
-    public Task<IEnumerable<RecordResponse>> GetCardsAsync();
+    public Task<RecordResponse> AddRecordAsync(AddRecordRequest request);
+    public Task<RecordResponse> UpdateRecordAsync(UpdateRecordRequest request);
+    public Task DeleteRecordAsync(Guid id);
+    public Task<RecordResponse> GetRecordAsync(Guid id);
+    public Task<IEnumerable<RecordResponse>> GetRecordsAsync();
 }

@@ -13,7 +13,7 @@ public class RecordResponse
     public List<string>? Tags { get; set; }
     public string? ModifiedBy { get; set; }
     public DateTime? ModifiedAt { get; set; }
-    public List<Guid>? CardIds { get; set; }
+    public List<Card>? Cards { get; set; }
 
     public RecordResponse(Record record)
     {
@@ -27,6 +27,6 @@ public class RecordResponse
         Tags = record.Tags;
         ModifiedBy = record.ModifiedBy;
         ModifiedAt = record.ModifiedAt;
-        CardIds = record.CardIds;
+        Cards = record.Cards;
     }
 }
